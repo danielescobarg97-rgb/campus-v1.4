@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Product, KitchenStation } from '../../types';
+import { ProductImage } from '../../components/ProductImage';
 import {
   X,
   Save,
@@ -357,13 +358,26 @@ export const ProductEditModal: React.FC<ProductEditModalProps> = ({
             <label className="font-bold text-slate-700 block flex items-center gap-1.5">
               <Image className="w-3.5 h-3.5 text-slate-500" /> Imagen del Producto
             </label>
-            <input
-              type="url"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="https://images.unsplash.com/..."
-              className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono text-slate-700"
-            />
+            <div className="flex gap-3 items-center">
+              <ProductImage
+                src={imageUrl}
+                alt={name || 'Vista previa'}
+                fallbackCategory={category}
+                className="w-14 h-14 rounded-xl shrink-0"
+              />
+              <div className="flex-1 min-w-0">
+                <input
+                  type="url"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="https://images.unsplash.com/..."
+                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono text-slate-700"
+                />
+                <span className="text-[10px] text-slate-400 mt-0.5 block">
+                  Si la URL falla o está vacía, se mostrará el placeholder SVG institucional automáticamente.
+                </span>
+              </div>
+            </div>
 
             <div className="space-y-1">
               <span className="text-[10px] text-slate-400 block font-bold uppercase">

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Product } from '../../types';
+import { ProductImage } from '../../components/ProductImage';
 import {
   Flame,
   Clock,
@@ -59,10 +60,12 @@ export const CombosCarousel: React.FC<CombosCarouselProps> = ({ combos, onSelect
     >
       {/* Background image with gradient */}
       <div className="absolute inset-0">
-        <img
+        <ProductImage
           src={currentCombo.imageUrl}
           alt={currentCombo.name}
-          className="w-full h-full object-cover opacity-30 transform scale-105 transition-all duration-700 ease-out"
+          fallbackCategory={currentCombo.category}
+          className="w-full h-full"
+          imgClassName="opacity-30 transform scale-105 transition-all duration-700 ease-out"
         />
         <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-slate-950 via-slate-950/90 to-transparent" />
       </div>

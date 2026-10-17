@@ -21,6 +21,7 @@ import { OrderQRCodeModal } from './OrderQRCodeModal';
 import { ProductCustomizerModal } from './ProductCustomizerModal';
 import { WalletModal } from './WalletModal';
 import { CombosCarousel } from './CombosCarousel';
+import { ProductImage } from '../../components/ProductImage';
 import { playOrderChime } from '../../utils/audio';
 import {
   Coffee,
@@ -542,14 +543,17 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                   isOutOfStock ? 'opacity-65 grayscale-20' : ''
                 }`}
               >
-                {/* Product Image */}
+                {/* Product Image with Fallback */}
                 <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
-                  <img
+                  <ProductImage
                     src={product.imageUrl}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    fallbackCategory={product.category}
+                    className="w-full h-full"
+                    imgClassName="group-hover:scale-105 transition-transform duration-300"
+                    showFallbackLabel={true}
                   />
-                  <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                  <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-20">
                     <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white/90 text-slate-800 backdrop-blur-xs shadow-xs">
                       {product.category}
                     </span>
@@ -566,7 +570,7 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                     )}
                   </div>
 
-                  <div className="absolute bottom-3 right-3 px-2 py-1 rounded-xl bg-slate-900/80 text-white text-[11px] font-medium backdrop-blur-xs flex items-center gap-1">
+                  <div className="absolute bottom-3 right-3 px-2 py-1 rounded-xl bg-slate-900/80 text-white text-[11px] font-medium backdrop-blur-xs flex items-center gap-1 z-20">
                     <Clock className="w-3 h-3 text-orange-400" />
                     ~{product.prepTimeMinutes} min
                   </div>
@@ -575,10 +579,16 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                 {/* Details */}
                 <div className="p-4 flex flex-col flex-1 justify-between gap-3">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-base leading-snug group-hover:text-orange-600 transition-colors">
+                    <h3
+                      title={product.name}
+                      className="font-bold text-slate-900 text-base leading-snug line-clamp-2 min-h-[2.5rem] group-hover:text-orange-600 transition-colors"
+                    >
                       {product.name}
                     </h3>
-                    <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                    <p
+                      title={product.description}
+                      className="text-xs text-slate-500 mt-1 line-clamp-2 min-h-[2rem] leading-relaxed"
+                    >
                       {product.description}
                     </p>
                   </div>

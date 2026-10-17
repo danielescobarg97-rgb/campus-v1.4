@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Product, SelectedModifier, OrderItem } from '../../types';
+import { ProductImage } from '../../components/ProductImage';
 import { X, Plus, Minus, Check, Clock, AlertTriangle, Users } from 'lucide-react';
 
 interface ProductCustomizerModalProps {
@@ -84,10 +85,13 @@ export const ProductCustomizerModal: React.FC<ProductCustomizerModalProps> = ({
       <div className="bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-100">
         {/* Header with image */}
         <div className="relative h-48 sm:h-52 w-full bg-slate-900 shrink-0">
-          <img
+          <ProductImage
             src={product.imageUrl}
             alt={product.name}
-            className="w-full h-full object-cover opacity-90"
+            fallbackCategory={product.category}
+            className="w-full h-full"
+            imgClassName="opacity-90 object-cover"
+            showFallbackLabel={true}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/20 to-transparent" />
           <button

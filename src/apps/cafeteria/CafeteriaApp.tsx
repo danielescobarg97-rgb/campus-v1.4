@@ -16,6 +16,7 @@ import { StaffQRScannerModal } from './StaffQRScannerModal';
 import { FinanceDashboard } from './FinanceDashboard';
 import { BatchPreparationPanel } from './BatchPreparationPanel';
 import { ProductEditModal } from './ProductEditModal';
+import { ProductImage } from '../../components/ProductImage';
 import {
   Clock,
   ChefHat,
@@ -410,10 +411,11 @@ export const CafeteriaApp: React.FC<CafeteriaAppProps> = ({ onLogout }) => {
                 >
                   <div className="space-y-3">
                     <div className="flex gap-3">
-                      <img
+                      <ProductImage
                         src={prod.imageUrl}
                         alt={prod.name}
-                        className="w-16 h-16 rounded-xl object-cover shrink-0"
+                        fallbackCategory={prod.category}
+                        className="w-16 h-16 rounded-xl shrink-0"
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-1">
