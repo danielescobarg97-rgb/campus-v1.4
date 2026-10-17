@@ -393,12 +393,13 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
 
             {/* Student Profile Pill & Secure Logout */}
             <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-              <div className="hidden md:block text-right text-xs">
-                <span className="font-bold text-slate-900 block leading-tight truncate max-w-[120px]">
+              <div className="hidden sm:block text-right text-xs">
+                <span className="font-bold text-slate-900 block leading-tight truncate max-w-[130px]">
                   {currentStudent?.name || studentName}
                 </span>
-                <span className="text-[10px] text-slate-400 font-mono block leading-tight">
-                  {currentStudent?.id || studentId}
+                <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1 justify-end leading-tight">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  {currentStudent?.id || studentId} • Nube
                 </span>
               </div>
 

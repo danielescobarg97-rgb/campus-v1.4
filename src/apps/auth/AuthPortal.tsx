@@ -16,6 +16,10 @@ import {
   ShieldCheck,
   CheckCircle2,
   Wallet,
+  Globe,
+  Smartphone,
+  Laptop,
+  Loader2,
 } from 'lucide-react';
 
 interface AuthPortalProps {
@@ -46,13 +50,13 @@ export const AuthPortal: React.FC<AuthPortalProps> = ({
   const [adminError, setAdminError] = useState<string | null>(null);
   const [adminLoading, setAdminLoading] = useState(false);
 
-  // Handle Student Auth Submit
-  const handleStudentSubmit = (e: React.FormEvent) => {
+  // Handle Student Auth Submit (Global async API persistence)
+  const handleStudentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStudentError(null);
     setStudentLoading(true);
 
-    setTimeout(() => {
+    try {
       if (studentMode === 'register') {
         if (!studentName.trim()) {
           setStudentError('Por favor ingresa tu nombre completo.');
@@ -70,23 +74,26 @@ export const AuthPortal: React.FC<AuthPortalProps> = ({
           return;
         }
 
-        const res = registerStudent(studentName, studentEmail, studentPassword);
+        const res = await registerStudent(studentName, studentEmail, studentPassword);
         if (res.success && res.user) {
           onStudentLoginSuccess(res.user);
         } else {
-          setStudentError(res.error || 'Error al registrar estudiante.');
+          setStudentError(res.error || 'Error al registrar estudiante en la base central.');
         }
       } else {
         // Login
-        const res = loginStudent(studentEmail, studentPassword);
+        const res = await loginStudent(studentEmail, studentPassword);
         if (res.success && res.user) {
           onStudentLoginSuccess(res.user);
         } else {
           setStudentError(res.error || 'Credenciales de estudiante incorrectas.');
         }
       }
+    } catch (err: any) {
+      setStudentError('Error al contactar con la base de datos central. Intenta nuevamente.');
+    } finally {
       setStudentLoading(false);
-    }, 400);
+    }
   };
 
   // Quick fill student demo credentials
@@ -285,6 +292,25 @@ export const AuthPortal: React.FC<AuthPortalProps> = ({
               </button>
             </div>
 
+            {/* Global Multi-Device Persistence Badge */}
+            <div className="p-3 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl flex items-center justify-between text-[11px]">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="text-slate-300 font-medium">
+                  {studentMode === 'register' ? 'Registro Centralizado Global' : 'Autenticación en la Nube'}
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 text-slate-400 font-semibold text-[10px]">
+                <Laptop className="w-3 h-3 text-orange-400" />
+                <span className="text-slate-500">⇄</span>
+                <Smartphone className="w-3 h-3 text-orange-400" />
+                <span className="text-emerald-400 font-bold">Válido en PC & Celular</span>
+              </div>
+            </div>
+
             {/* Error banner */}
             {studentError && (
               <div className="p-3 bg-red-950/60 border border-red-800/80 rounded-2xl flex items-center gap-2.5 text-xs text-red-300 font-semibold animate-in fade-in">
@@ -359,7 +385,14 @@ export const AuthPortal: React.FC<AuthPortalProps> = ({
                 className="w-full py-3.5 bg-orange-600 hover:bg-orange-500 active:scale-95 text-white font-bold text-sm rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 disabled:bg-slate-700"
               >
                 {studentLoading ? (
-                  <span>Verificando...</span>
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-white" />
+                    <span>
+                      {studentMode === 'register'
+                        ? 'Guardando en base de datos global...'
+                        : 'Verificando en servidor central...'}
+                    </span>
+                  </>
                 ) : studentMode === 'login' ? (
                   <>
                     <span>Entrar a mi Cuenta</span>

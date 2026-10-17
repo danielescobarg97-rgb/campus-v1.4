@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-route
 import { StudentApp } from './apps/student/StudentApp';
 import { AdminAuthGuard } from './apps/cafeteria/AdminAuthGuard';
 import { AuthPortal } from './apps/auth/AuthPortal';
-import { getCurrentStudent, subscribeCurrentStudent } from './services/store';
+import { getCurrentStudent, subscribeCurrentStudent, syncCurrentStudentWithRemote } from './services/store';
 import { StudentUser } from './types';
 
 function StudentRoot() {
@@ -14,7 +14,28 @@ function StudentRoot() {
     const unsub = subscribeCurrentStudent((s) => {
       setStudent(s);
     });
-    return () => unsub();
+
+    // Initial background sync with central database
+    syncCurrentStudentWithRemote();
+
+    // Sync when user returns to tab / device wakes up
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        syncCurrentStudentWithRemote();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    // Periodic heartbeat sync every 15s
+    const interval = setInterval(() => {
+      syncCurrentStudentWithRemote();
+    }, 15000);
+
+    return () => {
+      unsub();
+      document.removeEventListener('visibilitychange', handleVisibility);
+      clearInterval(interval);
+    };
   }, []);
 
   if (student) {

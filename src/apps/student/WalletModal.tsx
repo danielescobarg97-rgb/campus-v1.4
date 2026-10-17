@@ -154,6 +154,11 @@ export const WalletModal: React.FC<WalletModalProps> = ({
                 </>
               )}
             </button>
+
+            <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span>Saldo persistente global: sincronizado automáticamente con tu cuenta</span>
+            </div>
           </form>
 
           {/* Recent Movements */}

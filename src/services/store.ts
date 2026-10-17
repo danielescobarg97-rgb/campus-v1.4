@@ -1,5 +1,12 @@
 import { Product, Order, OrderStatus, StudentWallet, CampusLocation, StudentUser } from '../types';
 import { INITIAL_PRODUCTS, INITIAL_ORDERS, CAMPUS_LOCATIONS } from '../firebase/seed';
+import {
+  apiRegisterStudent,
+  apiLoginStudent,
+  apiGetStudent,
+  apiTopupWallet,
+  apiDebitWallet,
+} from './api';
 
 const PRODUCTS_KEY = 'campusbite_products_v4';
 const ORDERS_KEY = 'campusbite_orders_v4';
@@ -392,15 +399,39 @@ export function setCurrentStudent(student: StudentUser | null): void {
   notifySubscribers('wallet');
 }
 
-export function registerStudent(
+export async function registerStudent(
   name: string,
   email: string,
   password: string
-): { success: boolean; user?: StudentUser; error?: string } {
-  const students = getStoredStudents();
-  const normalizedEmail = email.trim().toLowerCase();
+): Promise<{ success: boolean; user?: StudentUser; error?: string }> {
+  const cleanEmail = email.trim().toLowerCase();
+  const cleanName = name.trim();
+  const cleanPass = password.trim();
 
-  const existing = students.find((s) => s.email.toLowerCase() === normalizedEmail);
+  // 1. Register with central backend (persisted in server DB across devices)
+  try {
+    const apiRes = await apiRegisterStudent(cleanName, cleanEmail, cleanPass);
+    if (apiRes.success && apiRes.user) {
+      const students = getStoredStudents();
+      const updated = [
+        apiRes.user,
+        ...students.filter((s) => s.email.toLowerCase() !== cleanEmail),
+      ];
+      localStorage.setItem(STUDENTS_DB_KEY, JSON.stringify(updated));
+      setCurrentStudent(apiRes.user);
+      return { success: true, user: apiRes.user };
+    }
+
+    if (apiRes.error && apiRes.error.includes('registrado')) {
+      return { success: false, error: apiRes.error };
+    }
+  } catch (err) {
+    console.warn('[AUTH] Central registration network call failed, trying local fallback:', err);
+  }
+
+  // Fallback to local storage only if network is completely down
+  const students = getStoredStudents();
+  const existing = students.find((s) => s.email.toLowerCase() === cleanEmail);
   if (existing) {
     return {
       success: false,
@@ -411,10 +442,10 @@ export function registerStudent(
   const studentId = `EST-2026-${Math.floor(100 + Math.random() * 900)}`;
   const newStudent: StudentUser = {
     id: studentId,
-    name: name.trim(),
-    email: normalizedEmail,
-    password: password.trim(),
-    walletBalance: 25000, // Bono de $25.000 COP al registrarse para probar pedidos
+    name: cleanName,
+    email: cleanEmail,
+    password: cleanPass,
+    walletBalance: 25000,
     transactions: [
       {
         id: `tx-welcome-${Date.now()}`,
@@ -433,27 +464,72 @@ export function registerStudent(
   return { success: true, user: newStudent };
 }
 
-export function loginStudent(
+export async function loginStudent(
   email: string,
   password: string
-): { success: boolean; user?: StudentUser; error?: string } {
-  const students = getStoredStudents();
-  const normalizedEmail = email.trim().toLowerCase();
+): Promise<{ success: boolean; user?: StudentUser; error?: string }> {
+  const cleanEmail = email.trim().toLowerCase();
   const cleanPassword = password.trim();
 
+  // 1. Query central backend database (allows cross-device sign in from PC, phone, etc.)
+  try {
+    const apiRes = await apiLoginStudent(cleanEmail, cleanPassword);
+    if (apiRes.success && apiRes.user) {
+      const students = getStoredStudents();
+      const updated = [
+        apiRes.user,
+        ...students.filter((s) => s.email.toLowerCase() !== cleanEmail),
+      ];
+      localStorage.setItem(STUDENTS_DB_KEY, JSON.stringify(updated));
+      setCurrentStudent(apiRes.user);
+      return { success: true, user: apiRes.user };
+    }
+
+    // If server specifically rejected the credentials
+    if (apiRes.error && !apiRes.error.includes('conexión') && !apiRes.error.includes('servidor')) {
+      return { success: false, error: apiRes.error };
+    }
+  } catch (err) {
+    console.warn('[AUTH] Central login call failed, trying local fallback:', err);
+  }
+
+  // 2. Fallback to local storage (for offline or local demo accounts)
+  const students = getStoredStudents();
   const found = students.find(
-    (s) => s.email.toLowerCase() === normalizedEmail && s.password === cleanPassword
+    (s) => s.email.toLowerCase() === cleanEmail && s.password === cleanPassword
   );
 
   if (!found) {
     return {
       success: false,
-      error: 'Correo o contraseña incorrectos. Verifica tus datos o regístrate.',
+      error: 'Correo o contraseña incorrectos. Verifica tus datos o regístrate si es tu primera vez.',
     };
   }
 
   setCurrentStudent(found);
   return { success: true, user: found };
+}
+
+export async function syncCurrentStudentWithRemote(): Promise<StudentUser | null> {
+  const current = getCurrentStudent();
+  if (!current) return null;
+
+  try {
+    const res = await apiGetStudent(current.id);
+    if (res.success && res.user) {
+      // If there's an update in wallet balance or transactions
+      if (
+        res.user.walletBalance !== current.walletBalance ||
+        res.user.transactions?.length !== current.transactions?.length
+      ) {
+        setCurrentStudent(res.user);
+        return res.user;
+      }
+    }
+  } catch (e) {
+    // Silent fail for background sync
+  }
+  return current;
 }
 
 export function logoutStudent(): void {
@@ -560,10 +636,15 @@ export function topupWallet(amount: number, method: string = 'PSE / Tarjeta'): S
       ],
     };
 
-    // Update in DB
+    // Update in DB locally
     const students = getStoredStudents().map((s) => (s.id === current.id ? updatedUser : s));
     localStorage.setItem(STUDENTS_DB_KEY, JSON.stringify(students));
     localStorage.setItem(CURRENT_STUDENT_KEY, JSON.stringify(updatedUser));
+
+    // Persist to central server for cross-device consistency
+    apiTopupWallet(current.id, amount, method).catch((err) => {
+      console.warn('[WALLET] Central topup sync error:', err);
+    });
 
     notifySubscribers('student');
     notifySubscribers('wallet');
@@ -612,10 +693,15 @@ export function debitWallet(amount: number, orderCode: string): boolean {
       ],
     };
 
-    // Update in DB
+    // Update in DB locally
     const students = getStoredStudents().map((s) => (s.id === current.id ? updatedUser : s));
     localStorage.setItem(STUDENTS_DB_KEY, JSON.stringify(students));
     localStorage.setItem(CURRENT_STUDENT_KEY, JSON.stringify(updatedUser));
+
+    // Persist to central server for cross-device consistency
+    apiDebitWallet(current.id, amount, orderCode).catch((err) => {
+      console.warn('[WALLET] Central debit sync error:', err);
+    });
 
     notifySubscribers('student');
     notifySubscribers('wallet');

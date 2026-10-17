@@ -1,0 +1,59 @@
+{
+  "students": [
+    {
+      "id": "EST-2026-184",
+      "name": "Carlos Gómez",
+      "email": "carlos@universidad.edu.co",
+      "password": "secretpassword",
+      "walletBalance": 45000,
+      "transactions": [
+        {
+          "id": "tx-top-1792271241013",
+          "description": "Recarga de saldo vía PSE Nequi",
+          "amount": 20000,
+          "date": "2026-10-17T21:07:21.013Z"
+        },
+        {
+          "id": "tx-welcome-1792271227325",
+          "description": "Bono de bienvenida por nuevo registro CampusPay",
+          "amount": 25000,
+          "date": "2026-10-17T21:07:07.325Z"
+        }
+      ],
+      "createdAt": "2026-10-17T21:07:07.325Z"
+    },
+    {
+      "id": "EST-2024-491",
+      "name": "Valentina Torres",
+      "email": "valentina@universidad.edu.co",
+      "password": "1234",
+      "walletBalance": 45000,
+      "transactions": [
+        {
+          "id": "tx-init-1",
+          "description": "Bono de bienvenida CampusPay",
+          "amount": 45000,
+          "date": "2026-10-16T21:07:00.912Z"
+        }
+      ],
+      "createdAt": "2026-10-17T21:07:00.912Z"
+    },
+    {
+      "id": "EST-2023-118",
+      "name": "Camilo Rodríguez",
+      "email": "camilo@universidad.edu.co",
+      "password": "1234",
+      "walletBalance": 30000,
+      "transactions": [
+        {
+          "id": "tx-init-2",
+          "description": "Recarga PSE Nequi",
+          "amount": 30000,
+          "date": "2026-10-17T09:07:00.912Z"
+        }
+      ],
+      "createdAt": "2026-10-17T21:07:00.912Z"
+    }
+  ],
+  "updatedAt": "2026-10-17T21:07:21.013Z"
+}
