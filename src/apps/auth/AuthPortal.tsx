@@ -20,7 +20,11 @@ import {
   Smartphone,
   Laptop,
   Loader2,
+  Database,
+  Settings,
 } from 'lucide-react';
+import { SupabaseConfigModal } from '../../components/SupabaseConfigModal';
+import { isSupabaseConfigured } from '../../services/supabase';
 
 interface AuthPortalProps {
   onStudentLoginSuccess: (student: StudentUser) => void;
@@ -44,11 +48,22 @@ export const AuthPortal: React.FC<AuthPortalProps> = ({
   const [studentError, setStudentError] = useState<string | null>(null);
   const [studentLoading, setStudentLoading] = useState(false);
 
-  // Admin form state
   const [adminUsername, setAdminUsername] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   const [adminError, setAdminError] = useState<string | null>(null);
   const [adminLoading, setAdminLoading] = useState(false);
+
+  // Supabase modal & configuration state
+  const [showSupabaseModal, setShowSupabaseModal] = useState(false);
+  const [isSupabaseActive, setIsSupabaseActive] = useState(() => isSupabaseConfigured());
+
+  React.useEffect(() => {
+    const handleConfigChange = () => {
+      setIsSupabaseActive(isSupabaseConfigured());
+    };
+    window.addEventListener('campusbite_supabase_config_changed', handleConfigChange);
+    return () => window.removeEventListener('campusbite_supabase_config_changed', handleConfigChange);
+  }, []);
 
   // Handle Student Auth Submit (Global async API persistence)
   const handleStudentSubmit = async (e: React.FormEvent) => {
@@ -145,9 +160,20 @@ export const AuthPortal: React.FC<AuthPortalProps> = ({
           </div>
         </div>
 
-        <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
-          Control de Acceso Seguro
-        </span>
+        <button
+          type="button"
+          onClick={() => setShowSupabaseModal(true)}
+          className={`text-[11px] font-bold px-3 py-1.5 rounded-full border transition-all flex items-center gap-1.5 shadow-sm active:scale-95 ${
+            isSupabaseActive
+              ? 'bg-emerald-950/60 text-emerald-300 border-emerald-700/80 hover:bg-emerald-900'
+              : 'bg-amber-950/60 text-amber-300 border-amber-700/80 hover:bg-amber-900'
+          }`}
+          title="Ver estado de conexión a Supabase PostgreSQL y Auth"
+        >
+          <Database className="w-3.5 h-3.5 text-emerald-400" />
+          <span>{isSupabaseActive ? 'Supabase Conectado' : 'Supabase (BaaS)'}</span>
+          <Settings className="w-3 h-3 text-slate-400" />
+        </button>
       </header>
 
       {/* Center Dynamic Card */}
@@ -292,24 +318,39 @@ export const AuthPortal: React.FC<AuthPortalProps> = ({
               </button>
             </div>
 
-            {/* Global Multi-Device Persistence Badge */}
-            <div className="p-3 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl flex items-center justify-between text-[11px]">
+            {/* Global Multi-Device Persistence Badge & Supabase Quick Trigger */}
+            <button
+              type="button"
+              onClick={() => setShowSupabaseModal(true)}
+              className="w-full p-3 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 hover:bg-slate-900/90 border border-slate-800 hover:border-slate-700 rounded-2xl flex items-center justify-between text-[11px] transition-all group text-left shadow-sm"
+              title="Abrir panel de configuración y estado de Supabase"
+            >
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  <span
+                    className={`animate-ping absolute inline-flex h-full w-full rounded-full ${
+                      isSupabaseActive ? 'bg-emerald-400' : 'bg-amber-400'
+                    } opacity-75`}
+                  ></span>
+                  <span
+                    className={`relative inline-flex rounded-full h-2 w-2 ${
+                      isSupabaseActive ? 'bg-emerald-500' : 'bg-amber-500'
+                    }`}
+                  ></span>
                 </span>
-                <span className="text-slate-300 font-medium">
-                  {studentMode === 'register' ? 'Registro Centralizado Global' : 'Autenticación en la Nube'}
+                <span className="text-slate-300 font-medium group-hover:text-white transition-colors">
+                  {isSupabaseActive
+                    ? 'Base de Datos Supabase (PostgreSQL)'
+                    : 'Modo Local • Configurar Supabase'}
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 text-slate-400 font-semibold text-[10px]">
-                <Laptop className="w-3 h-3 text-orange-400" />
-                <span className="text-slate-500">⇄</span>
-                <Smartphone className="w-3 h-3 text-orange-400" />
-                <span className="text-emerald-400 font-bold">Válido en PC & Celular</span>
+              <div className="flex items-center gap-1.5 font-semibold text-[10px]">
+                <Database className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-emerald-400 font-bold group-hover:underline">
+                  {isSupabaseActive ? '● Nube Sincronizada' : '⚙ Conectar Nube'}
+                </span>
               </div>
-            </div>
+            </button>
 
             {/* Error banner */}
             {studentError && (
@@ -528,6 +569,12 @@ export const AuthPortal: React.FC<AuthPortalProps> = ({
       <footer className="max-w-4xl mx-auto w-full text-center text-xs text-slate-500 py-2 border-t border-slate-800/60">
         © 2026 CampusBite • Sistema Operativo Click & Collect y Cocina Inteligente
       </footer>
+
+      {/* Supabase Connection & Diagnostics Modal */}
+      <SupabaseConfigModal
+        isOpen={showSupabaseModal}
+        onClose={() => setShowSupabaseModal(false)}
+      />
     </div>
   );
 };

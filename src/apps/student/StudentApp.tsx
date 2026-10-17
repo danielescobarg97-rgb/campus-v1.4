@@ -48,7 +48,11 @@ import {
   Flame,
   CheckCircle2,
   LogOut,
+  Database,
+  Layers,
 } from 'lucide-react';
+import { SupabaseConfigModal } from '../../components/SupabaseConfigModal';
+import { isSupabaseConfigured } from '../../services/supabase';
 
 interface StudentAppProps {
   onLogout?: () => void;
@@ -59,6 +63,7 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
 
   // Current logged in student
   const [currentStudent, setCurrentStudentState] = useState<StudentUser | null>(() => getCurrentStudent());
+  const [showSupabaseModal, setShowSupabaseModal] = useState(false);
 
   // App States
   const [products, setProducts] = useState<Product[]>([]);
@@ -393,15 +398,29 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
 
             {/* Student Profile Pill & Secure Logout */}
             <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-              <div className="hidden sm:block text-right text-xs">
+              <button
+                type="button"
+                onClick={() => setShowSupabaseModal(true)}
+                className="hidden sm:block text-right text-xs hover:opacity-80 transition-opacity cursor-pointer group"
+                title="Ver estado de sincronización en Supabase Cloud"
+              >
                 <span className="font-bold text-slate-900 block leading-tight truncate max-w-[130px]">
                   {currentStudent?.name || studentName}
                 </span>
-                <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1 justify-end leading-tight">
+                <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1 justify-end leading-tight group-hover:underline">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  {currentStudent?.id || studentId} • Nube
+                  {currentStudent?.id || studentId} • Supabase BaaS
                 </span>
-              </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowSupabaseModal(true)}
+                className="p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors sm:hidden"
+                title="Configuración de Supabase BaaS"
+              >
+                <Database className="w-4 h-4 text-emerald-600" />
+              </button>
 
               <button
                 type="button"
@@ -1142,6 +1161,12 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
           </div>
         </div>
       </footer>
+
+      {/* Supabase Connection & Configuration Modal */}
+      <SupabaseConfigModal
+        isOpen={showSupabaseModal}
+        onClose={() => setShowSupabaseModal(false)}
+      />
     </div>
   );
 };
