@@ -63,33 +63,33 @@ export const BatchPreparationPanel: React.FC<BatchPreparationPanelProps> = ({ or
   if (activeOrders.length === 0) return null;
 
   return (
-    <div className="bg-slate-900 text-white rounded-2xl border border-slate-700/80 shadow-lg overflow-hidden">
+    <div className="bg-[#032244] text-white rounded-2xl border border-[#032244] shadow-lg overflow-hidden">
       {/* Header bar */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full p-3.5 px-4 flex items-center justify-between gap-3 text-left hover:bg-slate-800/60 transition-colors"
+        className="w-full p-3.5 px-4 flex items-center justify-between gap-3 text-left hover:bg-white/5 transition-colors"
       >
         <div className="flex items-center gap-2.5">
-          <div className="p-1.5 bg-orange-500/20 text-orange-400 rounded-xl">
+          <div className="p-1.5 bg-[#D7131A] text-white rounded-xl">
             <Layers className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-black uppercase tracking-wider text-orange-400">
+              <span className="text-xs font-black uppercase tracking-wider text-white">
                 Preparación por Lotes (Batching Cocina)
               </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-orange-600 text-white font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#D7131A] text-white font-bold tabular-nums">
                 {totalItemsCount} platos en cola
               </span>
             </div>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-white/70">
               Total acumulado entre {activeOrders.length} pedidos activos para cocinar en bloque
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-slate-400">
+        <div className="flex items-center gap-2 text-white/75">
           <span className="text-xs">{isOpen ? 'Ocultar' : 'Ver lotes'}</span>
           {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         </div>
@@ -97,7 +97,7 @@ export const BatchPreparationPanel: React.FC<BatchPreparationPanelProps> = ({ or
 
       {/* Expanded Batches Grid */}
       {isOpen && (
-        <div className="p-3.5 bg-slate-950/70 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
+        <div className="p-3.5 bg-[#02162d] border-t border-white/10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
           {batches.map(([key, batch]) => {
             const isTicked = !!tickedBatches[key];
             return (
@@ -106,34 +106,34 @@ export const BatchPreparationPanel: React.FC<BatchPreparationPanelProps> = ({ or
                 onClick={() => toggleTick(key)}
                 className={`p-2.5 rounded-xl border cursor-pointer transition-all flex items-start justify-between gap-2 text-xs select-none ${
                   isTicked
-                    ? 'bg-slate-900/40 border-slate-800 text-slate-500 line-through'
-                    : 'bg-slate-900 border-slate-700/80 text-white hover:border-orange-500/50 shadow-xs'
+                    ? 'bg-white/5 border-white/10 text-white/40 line-through'
+                    : 'bg-[#032244] border-white/15 text-white hover:border-[#D7131A] shadow-xs'
                 }`}
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5 mb-1">
                     {getStationIcon(batch.station)}
-                    <span className="text-[10px] text-slate-400 capitalize truncate">
+                    <span className="text-[10px] text-white/65 capitalize truncate">
                       {batch.station.replace('_', ' ')}
                     </span>
                   </div>
                   <span className="font-bold leading-tight block truncate">{batch.name}</span>
                   {batch.modifiersCount > 0 && (
-                    <span className="text-[10px] text-amber-400 block mt-0.5 font-normal">
+                    <span className="text-[10px] text-amber-300 block mt-0.5 font-normal">
                       ({batch.modifiersCount} con personalización)
                     </span>
                   )}
                 </div>
 
                 <div className="flex flex-col items-end shrink-0">
-                  <span className="text-base font-black text-orange-400 leading-none">
+                  <span className="text-base font-black text-[#D7131A] leading-none tabular-nums">
                     x{batch.quantity}
                   </span>
                   <div className="mt-1">
                     {isTicked ? (
-                      <CheckSquare className="w-4 h-4 text-emerald-500" />
+                      <CheckSquare className="w-4 h-4 text-emerald-400" />
                     ) : (
-                      <Square className="w-4 h-4 text-slate-600" />
+                      <Square className="w-4 h-4 text-white/40" />
                     )}
                   </div>
                 </div>

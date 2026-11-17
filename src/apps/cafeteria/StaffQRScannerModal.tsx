@@ -65,22 +65,22 @@ export const StaffQRScannerModal: React.FC<StaffQRScannerModalProps> = ({ orders
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#032244]/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-slate-200 flex flex-col max-h-[92vh]">
         {/* Header */}
-        <div className="p-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
+        <div className="p-4 bg-[#032244] text-white flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-orange-600 rounded-xl">
+            <div className="p-2 bg-[#D7131A] rounded-xl">
               <QrCode className="w-5 h-5 text-white" />
             </div>
             <div>
               <h2 className="text-base font-bold leading-none">Despacho de Pedidos</h2>
-              <p className="text-xs text-slate-400 mt-1">Escáner y verificación de token QR</p>
+              <p className="text-xs text-white/70 mt-1">Escáner y verificación de token QR</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-full"
+            className="p-1.5 bg-white/10 hover:bg-white/20 text-white rounded-full"
           >
             <X className="w-5 h-5" />
           </button>
@@ -97,23 +97,23 @@ export const StaffQRScannerModal: React.FC<StaffQRScannerModalProps> = ({ orders
 
           {/* Quick Code Input */}
           <form onSubmit={handleSearch} className="space-y-2">
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
+            <label className="text-xs font-bold uppercase tracking-wider text-[#032244]/65 block">
               Ingresar Token de 4 Dígitos o Nombre
             </label>
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-[#032244]/40 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   placeholder="Ej. 8491 o Valentina"
-                  className="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-2xl border border-slate-200 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 font-bold text-slate-800"
+                  className="w-full pl-10 pr-3 py-3 bg-[#F5F6F8] rounded-2xl border border-slate-200 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#D7131A] font-bold text-[#032244]"
                 />
               </div>
               <button
                 type="submit"
-                className="px-5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-2xl transition-all shadow-xs"
+                className="px-5 bg-[#D7131A] hover:bg-[#b51016] text-white font-bold text-xs rounded-2xl transition-all shadow-xs"
               >
                 Buscar
               </button>
@@ -122,13 +122,13 @@ export const StaffQRScannerModal: React.FC<StaffQRScannerModalProps> = ({ orders
 
           {/* Matched Order Card */}
           {matchedOrder ? (
-            <div className="bg-slate-50 rounded-2xl border border-slate-200 p-4 space-y-4">
+            <div className="bg-[#F5F6F8] rounded-2xl border border-slate-200 p-4 space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-200">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#032244]/55 block">
                     Orden Encontrada
                   </span>
-                  <span className="text-xl font-black text-slate-900 font-mono">
+                  <span className="text-xl font-black text-[#032244] font-mono tabular-nums">
                     #{matchedOrder.pickupCode}
                   </span>
                 </div>
@@ -137,8 +137,8 @@ export const StaffQRScannerModal: React.FC<StaffQRScannerModalProps> = ({ orders
                     matchedOrder.status === 'listo'
                       ? 'bg-emerald-100 text-emerald-800'
                       : matchedOrder.status === 'entregado'
-                      ? 'bg-slate-200 text-slate-600'
-                      : 'bg-orange-100 text-orange-800'
+                      ? 'bg-slate-200 text-[#032244]'
+                      : 'bg-[#D7131A]/10 text-[#D7131A]'
                   }`}
                 >
                   {matchedOrder.status}
@@ -235,15 +235,15 @@ export const StaffQRScannerModal: React.FC<StaffQRScannerModalProps> = ({ orders
                     key={o.id}
                     type="button"
                     onClick={() => setMatchedOrder(o)}
-                    className="w-full p-2.5 bg-slate-50 hover:bg-orange-50 border border-slate-200 hover:border-orange-200 rounded-xl flex items-center justify-between text-left text-xs transition-colors"
+                    className="w-full p-2.5 bg-[#F5F6F8] hover:bg-[#D7131A]/5 border border-slate-200 hover:border-[#D7131A]/30 rounded-xl flex items-center justify-between text-left text-xs transition-colors"
                   >
                     <div>
-                      <span className="font-bold text-slate-900 font-mono mr-2">
+                      <span className="font-bold text-[#032244] font-mono mr-2 tabular-nums">
                         #{o.pickupCode}
                       </span>
-                      <span className="text-slate-600">{o.studentName}</span>
+                      <span className="text-[#032244]/75">{o.studentName}</span>
                     </div>
-                    <span className="font-bold text-orange-600 text-[11px]">Verificar →</span>
+                    <span className="font-bold text-[#D7131A] text-[11px]">Verificar →</span>
                   </button>
                 ))}
             </div>

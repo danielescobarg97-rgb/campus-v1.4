@@ -24,7 +24,6 @@ import { CombosCarousel } from './CombosCarousel';
 import { ProductImage } from '../../components/ProductImage';
 import { playOrderChime } from '../../utils/audio';
 import {
-  Coffee,
   ShoppingBag,
   Plus,
   Minus,
@@ -35,9 +34,7 @@ import {
   Sparkles,
   AlertTriangle,
   ChevronRight,
-  User,
   History,
-  Lock,
   QrCode,
   MapPin,
   Wallet,
@@ -45,14 +42,9 @@ import {
   Calendar,
   Zap,
   WifiOff,
-  Flame,
   CheckCircle2,
   LogOut,
-  Database,
-  Layers,
 } from 'lucide-react';
-import { SupabaseConfigModal } from '../../components/SupabaseConfigModal';
-import { isSupabaseConfigured } from '../../services/supabase';
 
 interface StudentAppProps {
   onLogout?: () => void;
@@ -63,7 +55,6 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
 
   // Current logged in student
   const [currentStudent, setCurrentStudentState] = useState<StudentUser | null>(() => getCurrentStudent());
-  const [showSupabaseModal, setShowSupabaseModal] = useState(false);
 
   // App States
   const [products, setProducts] = useState<Product[]>([]);
@@ -323,38 +314,34 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#F5F6F8] text-[#032244] flex flex-col font-sans">
       {/* Offline Alert Banner */}
       {!isOnline && (
-        <div className="bg-amber-600 text-white text-xs font-semibold py-1.5 px-4 text-center flex items-center justify-center gap-2 sticky top-0 z-50 shadow-md">
-          <WifiOff className="w-4 h-4 shrink-0" />
+        <div className="bg-[#032244] text-white text-xs font-semibold py-1.5 px-4 text-center flex items-center justify-center gap-2 sticky top-0 z-50 shadow-md">
+          <WifiOff className="w-4 h-4 shrink-0 text-[#D7131A]" />
           <span>Estás sin conexión a internet. Tus pedidos y QR están disponibles en modo local offline.</span>
         </div>
       )}
 
       {/* Top Header */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-xs">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
           {/* Logo & Campus Location Dropdown */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-orange-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-orange-500/20">
-              <Coffee className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <h1 className="font-black text-slate-900 text-lg leading-tight">CampusBite</h1>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-orange-100 text-orange-700">
-                  v1.4
-                </span>
-              </div>
-
+          <div className="flex items-center gap-3 min-w-0">
+            <img
+              src="/assets/aistudio/UNIGO_logo_50365f1d.png"
+              alt="UNIGO"
+              className="h-8 sm:h-9 w-auto object-contain shrink-0"
+            />
+            <span className="hidden sm:inline-block h-7 w-px bg-[#032244]/15 shrink-0" />
+            <div className="min-w-0">
               {/* Multi-Location Switcher */}
-              <div className="flex items-center gap-1 text-xs text-slate-600 font-medium mt-0.5">
-                <MapPin className="w-3.5 h-3.5 text-orange-600 shrink-0" />
+              <div className="flex items-center gap-1 text-xs text-[#032244]/75 font-medium">
+                <MapPin className="w-3.5 h-3.5 text-[#D7131A] shrink-0" />
                 <select
                   value={activeLocation.id}
                   onChange={(e) => setActiveLocation(e.target.value)}
-                  className="bg-transparent font-bold text-slate-800 hover:text-orange-600 focus:outline-none cursor-pointer py-0.5 pr-2"
+                  className="bg-transparent font-bold text-[#032244] hover:text-[#D7131A] focus:outline-none cursor-pointer py-0.5 pr-1 max-w-[175px] sm:max-w-none truncate"
                 >
                   {getStoredLocations().map((loc) => (
                     <option key={loc.id} value={loc.id}>
@@ -366,18 +353,18 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
             </div>
           </div>
 
-          {/* Right Header: CampusPay Wallet, History & Admin */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Right Header: CampusPay Wallet, History & Logout */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {/* CampusPay Pill */}
             <button
               type="button"
               onClick={() => setIsWalletOpen(true)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 hover:border-orange-300 text-orange-950 transition-all shadow-xs active:scale-95"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-[#F5F6F8] border border-slate-200 hover:border-[#D7131A] text-[#032244] transition-all shadow-xs active:scale-95"
             >
-              <Wallet className="w-4 h-4 text-orange-600" />
+              <Wallet className="w-4 h-4 text-[#D7131A]" />
               <div className="text-left text-xs">
-                <span className="text-[10px] block leading-none text-slate-500 font-medium">CampusPay</span>
-                <span className="font-black text-slate-900 leading-none">
+                <span className="text-[10px] block leading-none text-[#032244]/65 font-semibold">CampusPay</span>
+                <span className="font-black text-[#032244] leading-none tabular-nums">
                   ${wallet.balance.toLocaleString('es-CO')}
                 </span>
               </div>
@@ -387,49 +374,34 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
             <button
               type="button"
               onClick={() => setShowHistoryModal(true)}
-              className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors relative"
+              className="p-2 text-[#032244]/75 hover:text-[#032244] hover:bg-[#F5F6F8] rounded-xl transition-colors relative"
               title="Mis pedidos anteriores"
             >
               <History className="w-5 h-5" />
               {studentOrders.length > 0 && (
-                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-orange-600 ring-2 ring-white" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#D7131A] ring-2 ring-white" />
               )}
             </button>
 
-            {/* Student Profile Pill & Secure Logout */}
+            {/* Student Profile & Secure Logout */}
             <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-              <button
-                type="button"
-                onClick={() => setShowSupabaseModal(true)}
-                className="hidden sm:block text-right text-xs hover:opacity-80 transition-opacity cursor-pointer group"
-                title="Ver estado de sincronización en Supabase Cloud"
-              >
-                <span className="font-bold text-slate-900 block leading-tight truncate max-w-[130px]">
+              <div className="hidden sm:block text-right text-xs">
+                <span className="font-bold text-[#032244] block leading-tight truncate max-w-[130px]">
                   {currentStudent?.name || studentName}
                 </span>
-                <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1 justify-end leading-tight group-hover:underline">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  {currentStudent?.id || studentId} • Supabase BaaS
+                <span className="text-[10px] text-[#032244]/60 font-medium block leading-tight font-mono">
+                  {currentStudent?.id || studentId}
                 </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setShowSupabaseModal(true)}
-                className="p-1.5 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-colors sm:hidden"
-                title="Configuración de Supabase BaaS"
-              >
-                <Database className="w-4 h-4 text-emerald-600" />
-              </button>
+              </div>
 
               <button
                 type="button"
                 onClick={handleStudentLogout}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 border border-red-200 transition-colors shadow-xs active:scale-95"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[#D7131A] hover:bg-[#D7131A]/10 border border-[#D7131A]/25 transition-colors shadow-xs active:scale-95"
                 title="Cerrar sesión de estudiante"
               >
                 <LogOut className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Cerrar Sesión</span>
+                <span className="hidden sm:inline">Salir</span>
               </button>
             </div>
           </div>
@@ -464,33 +436,33 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
         )}
 
         {/* Location Queue Status Pill & Time Estimation Bar */}
-        <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-xs flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2">
             <span
               className={`w-2.5 h-2.5 rounded-full ${
                 dynamicPrep.queueLoad === 'alta'
-                  ? 'bg-red-500 animate-ping'
+                  ? 'bg-[#D7131A]'
                   : dynamicPrep.queueLoad === 'moderada'
                   ? 'bg-amber-500'
                   : 'bg-emerald-500'
               }`}
             />
-            <span className="font-bold text-slate-800">
+            <span className="font-bold text-[#032244]">
               {activeLocation.name}:
             </span>
-            <span className="text-slate-600">
+            <span className="text-[#032244]/75">
               {dynamicPrep.queueLoad === 'alta'
-                ? '🔥 Alta demanda en cocina (+15 min)'
+                ? 'Alta demanda en cocina (+15 min)'
                 : dynamicPrep.queueLoad === 'moderada'
-                ? '⚡ Demanda media en cocina'
-                : '🟢 Cocina despejada (atención rápida)'}
+                ? 'Demanda media en cocina'
+                : 'Cocina despejada (atención rápida)'}
             </span>
           </div>
 
-          <div className="flex items-center gap-3 text-slate-500 font-medium">
+          <div className="flex items-center gap-3 text-[#032244]/70 font-medium tabular-nums">
             <span className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-orange-600" />
-              Tiempo estimado actual: <strong className="text-slate-900 font-bold">~{dynamicPrep.estimatedMinutes} min</strong>
+              <Clock className="w-3.5 h-3.5 text-[#D7131A]" />
+              Tiempo estimado: <strong className="text-[#032244] font-bold">~{dynamicPrep.estimatedMinutes} min</strong>
             </span>
             <span>•</span>
             <span>{dynamicPrep.pendingOrdersCount} pedidos en cola</span>
@@ -509,19 +481,19 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
         <div className="space-y-3">
           {/* Search bar */}
           <div className="relative">
-            <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+            <Search className="w-5 h-5 text-[#032244]/40 absolute left-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar empanada, café, hamburguesa, croissant, jugo..."
-              className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm font-medium text-slate-800 shadow-xs"
+              className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#D7131A] text-sm font-medium text-[#032244] placeholder-slate-400 shadow-xs"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#032244]/40 hover:text-[#032244]"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -539,8 +511,8 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-4 py-2 rounded-2xl text-xs font-bold whitespace-nowrap transition-all ${
                     isSelected
-                      ? 'bg-orange-600 text-white shadow-md shadow-orange-600/20'
-                      : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300'
+                      ? 'bg-[#D7131A] text-white shadow-md shadow-[#D7131A]/20'
+                      : 'bg-white text-[#032244] border border-slate-200 hover:border-[#032244]/30'
                   }`}
                 >
                   {cat}
@@ -559,12 +531,12 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
             return (
               <div
                 key={product.id}
-                className={`bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-md transition-all flex flex-col group ${
+                className={`bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-xs hover:shadow-md transition-all flex flex-col group ${
                   isOutOfStock ? 'opacity-65 grayscale-20' : ''
                 }`}
               >
                 {/* Product Image with Fallback */}
-                <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
+                <div className="relative h-44 w-full bg-[#F5F6F8] overflow-hidden">
                   <ProductImage
                     src={product.imageUrl}
                     alt={product.name}
@@ -574,24 +546,24 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                     showFallbackLabel={true}
                   />
                   <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-20">
-                    <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white/90 text-slate-800 backdrop-blur-xs shadow-xs">
+                    <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white/95 text-[#032244] backdrop-blur-xs shadow-xs">
                       {product.category}
                     </span>
                     {isLowStock && (
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-white shadow-xs flex items-center gap-1">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#D7131A] text-white shadow-xs flex items-center gap-1">
                         <AlertTriangle className="w-3 h-3" />
                         ¡Quedan {product.stock}!
                       </span>
                     )}
                     {isOutOfStock && (
-                      <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-600 text-white shadow-xs">
+                      <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#032244] text-white shadow-xs">
                         Agotado
                       </span>
                     )}
                   </div>
 
-                  <div className="absolute bottom-3 right-3 px-2 py-1 rounded-xl bg-slate-900/80 text-white text-[11px] font-medium backdrop-blur-xs flex items-center gap-1 z-20">
-                    <Clock className="w-3 h-3 text-orange-400" />
+                  <div className="absolute bottom-3 right-3 px-2 py-1 rounded-xl bg-[#032244]/85 text-white text-[11px] font-semibold backdrop-blur-xs flex items-center gap-1 z-20 tabular-nums">
+                    <Clock className="w-3 h-3 text-[#D7131A]" />
                     ~{product.prepTimeMinutes} min
                   </div>
                 </div>
@@ -601,13 +573,13 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                   <div>
                     <h3
                       title={product.name}
-                      className="font-bold text-slate-900 text-base leading-snug line-clamp-2 min-h-[2.5rem] group-hover:text-orange-600 transition-colors"
+                      className="font-bold text-[#032244] text-base leading-snug line-clamp-2 min-h-[2.5rem] group-hover:text-[#D7131A] transition-colors"
                     >
                       {product.name}
                     </h3>
                     <p
                       title={product.description}
-                      className="text-xs text-slate-500 mt-1 line-clamp-2 min-h-[2rem] leading-relaxed"
+                      className="text-xs text-[#032244]/65 mt-1 line-clamp-2 min-h-[2rem] leading-relaxed"
                     >
                       {product.description}
                     </p>
@@ -616,8 +588,8 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                   {/* Price & Action Button */}
                   <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
                     <div>
-                      <span className="text-xs text-slate-400 block font-medium">Precio</span>
-                      <span className="text-lg font-black text-slate-900">
+                      <span className="text-xs text-[#032244]/55 block font-medium">Precio</span>
+                      <span className="text-lg font-black text-[#032244] tabular-nums">
                         ${product.price.toLocaleString('es-CO')}
                       </span>
                     </div>
@@ -630,13 +602,13 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                         isOutOfStock
                           ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                           : product.modifierGroups?.length
-                          ? 'bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200'
-                          : 'bg-orange-600 text-white hover:bg-orange-700 shadow-md'
+                          ? 'bg-[#032244] text-white hover:bg-[#0a3466] shadow-xs'
+                          : 'bg-[#D7131A] text-white hover:bg-[#b51016] shadow-md shadow-[#D7131A]/15'
                       }`}
                     >
                       {product.modifierGroups?.length ? (
                         <>
-                          <Sparkles className="w-3.5 h-3.5 text-orange-600" />
+                          <Sparkles className="w-3.5 h-3.5 text-white" />
                           <span>Personalizar</span>
                         </>
                       ) : (
@@ -660,25 +632,25 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
           <button
             type="button"
             onClick={() => setIsCartOpen(true)}
-            className="w-full bg-slate-900 hover:bg-slate-950 text-white p-4 rounded-3xl shadow-2xl flex items-center justify-between gap-4 border border-slate-700/60 active:scale-[0.99] transition-all"
+            className="w-full bg-[#032244] hover:bg-[#021933] text-white p-4 rounded-3xl shadow-2xl shadow-[#032244]/30 flex items-center justify-between gap-4 border border-white/10 active:scale-[0.99] transition-all"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-orange-600 text-white flex items-center justify-center font-bold text-sm shadow-md">
+              <div className="w-10 h-10 rounded-2xl bg-[#D7131A] text-white flex items-center justify-center font-bold text-sm shadow-md tabular-nums">
                 {cartItemsCount}
               </div>
               <div className="text-left">
-                <span className="text-xs text-slate-400 block font-medium">
+                <span className="text-xs text-white/70 block font-medium">
                   {isGroupOrderActive ? 'Pedido Grupal en Carrito' : 'Tu pedido actual'}
                 </span>
-                <span className="text-base font-black text-white">
+                <span className="text-base font-black text-white tabular-nums">
                   ${cartSubtotal.toLocaleString('es-CO')}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-xs font-bold text-orange-400">
+            <div className="flex items-center gap-2 text-xs font-bold text-white bg-[#D7131A] px-3.5 py-2 rounded-2xl">
               <span>Revisar y Pedir</span>
-              <ChevronRight className="w-4 h-4 text-orange-400" />
+              <ChevronRight className="w-4 h-4 text-white" />
             </div>
           </button>
         </div>
@@ -686,21 +658,21 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
 
       {/* Cart Drawer / Modal */}
       {isCartOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden border border-slate-100">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-[#032244]/60 backdrop-blur-sm animate-in fade-in">
+          <div className="bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200">
             {/* Header */}
-            <div className="p-4 sm:p-5 bg-slate-900 text-white flex items-center justify-between shrink-0">
+            <div className="p-4 sm:p-5 bg-[#032244] text-white flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
-                <ShoppingBag className="w-5 h-5 text-orange-400" />
+                <ShoppingBag className="w-5 h-5 text-[#D7131A]" />
                 <div>
                   <h3 className="font-bold text-base leading-tight">Tu Carrito de Pedido</h3>
-                  <span className="text-xs text-slate-400">{activeLocation.name}</span>
+                  <span className="text-xs text-white/70">{activeLocation.name}</span>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setIsCartOpen(false)}
-                className="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-full text-slate-300"
+                className="p-1.5 bg-white/10 hover:bg-white/20 rounded-full text-white"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -710,8 +682,8 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
             <div className="p-5 overflow-y-auto space-y-5 flex-1 divide-y divide-slate-100">
               {/* Feature 1: Schedule & Grab Pickup Options */}
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-orange-600" />
+                <label className="text-xs font-bold uppercase tracking-wider text-[#032244]/65 flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-[#D7131A]" />
                   Momento de Recogida
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -720,14 +692,14 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                     onClick={() => setPickupType('inmediato')}
                     className={`p-3 rounded-2xl border text-xs font-bold text-left transition-all ${
                       pickupType === 'inmediato'
-                        ? 'border-orange-600 bg-orange-50 text-orange-950 ring-1 ring-orange-600'
-                        : 'border-slate-200 text-slate-600 hover:border-slate-300'
+                        ? 'border-[#D7131A] bg-[#D7131A]/5 text-[#032244] ring-1 ring-[#D7131A]'
+                        : 'border-slate-200 text-[#032244]/75 hover:border-[#032244]/30'
                     }`}
                   >
-                    <span className="flex items-center gap-1.5 font-black text-slate-900 mb-0.5">
-                      <Zap className="w-3.5 h-3.5 text-orange-600" /> Inmediato
+                    <span className="flex items-center gap-1.5 font-black text-[#032244] mb-0.5">
+                      <Zap className="w-3.5 h-3.5 text-[#D7131A]" /> Inmediato
                     </span>
-                    <span className="text-[11px] text-slate-500">
+                    <span className="text-[11px] text-[#032244]/65">
                       Listo en ~{dynamicPrep.estimatedMinutes} min
                     </span>
                   </button>
@@ -737,14 +709,14 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                     onClick={() => setPickupType('programado')}
                     className={`p-3 rounded-2xl border text-xs font-bold text-left transition-all ${
                       pickupType === 'programado'
-                        ? 'border-indigo-600 bg-indigo-50 text-indigo-950 ring-1 ring-indigo-600'
-                        : 'border-slate-200 text-slate-600 hover:border-slate-300'
+                        ? 'border-[#032244] bg-[#032244]/5 text-[#032244] ring-1 ring-[#032244]'
+                        : 'border-slate-200 text-[#032244]/75 hover:border-[#032244]/30'
                     }`}
                   >
-                    <span className="flex items-center gap-1.5 font-black text-slate-900 mb-0.5">
-                      <Calendar className="w-3.5 h-3.5 text-indigo-600" /> Programar
+                    <span className="flex items-center gap-1.5 font-black text-[#032244] mb-0.5">
+                      <Calendar className="w-3.5 h-3.5 text-[#032244]" /> Programar
                     </span>
-                    <span className="text-[11px] text-slate-500">Para el receso</span>
+                    <span className="text-[11px] text-[#032244]/65">Para el receso</span>
                   </button>
                 </div>
 
@@ -774,17 +746,17 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
               {/* Feature 5: Group Ordering Toggle */}
               <div className="pt-4 flex items-center justify-between">
                 <div>
-                  <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                    <Users className="w-4 h-4 text-purple-600" />
+                  <span className="text-xs font-bold text-[#032244] flex items-center gap-1.5">
+                    <Users className="w-4 h-4 text-[#032244]" />
                     Modo "Compañero de Fila" (Pedido Grupal)
                   </span>
-                  <p className="text-[11px] text-slate-500">Pide por tus amigos y etiqueta cada plato</p>
+                  <p className="text-[11px] text-[#032244]/65">Pide por tus amigos y etiqueta cada plato</p>
                 </div>
                 <input
                   type="checkbox"
                   checked={isGroupOrderActive}
                   onChange={(e) => setIsGroupOrderActive(e.target.checked)}
-                  className="w-5 h-5 rounded text-orange-600 accent-orange-600 cursor-pointer"
+                  className="w-5 h-5 rounded text-[#D7131A] accent-[#D7131A] cursor-pointer"
                 />
               </div>
 
@@ -831,7 +803,7 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                           </span>
                         )}
                       </div>
-                      <span className="text-orange-700 font-bold block mt-0.5">
+                      <span className="text-[#D7131A] font-bold block mt-0.5 tabular-nums">
                         ${(item.price * item.quantity).toLocaleString('es-CO')}
                       </span>
                       {item.selectedModifiers && item.selectedModifiers.length > 0 && (
@@ -845,15 +817,15 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                       )}
 
                       {/* Compañero de Fila: Asignación Directa y Clara */}
-                      <div className="mt-2.5 pt-2 border-t border-slate-200/60 bg-purple-50/60 p-2.5 rounded-xl border border-purple-100/90">
+                      <div className="mt-2.5 pt-2 border-t border-slate-200/60 bg-[#F5F6F8] p-2.5 rounded-xl border border-slate-200">
                         <div className="flex items-center justify-between mb-1.5">
-                          <span className="text-[10px] font-black text-purple-950 uppercase flex items-center gap-1 tracking-wider">
-                            <Users className="w-3 h-3 text-purple-600" />
+                          <span className="text-[10px] font-black text-[#032244] uppercase flex items-center gap-1 tracking-wider">
+                            <Users className="w-3 h-3 text-[#032244]" />
                             ¿Para quién es este plato?
                           </span>
                           {item.assignedToFriend ? (
-                            <span className="text-[10px] font-bold text-purple-800 bg-purple-200/80 px-2 py-0.5 rounded-md">
-                              👤 {item.assignedToFriend}
+                            <span className="text-[10px] font-bold text-[#032244] bg-[#032244]/10 px-2 py-0.5 rounded-md">
+                              {item.assignedToFriend}
                             </span>
                           ) : (
                             <span className="text-[10px] text-slate-400 font-medium">
@@ -882,8 +854,8 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                                 }
                                 className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${
                                   isSelected
-                                    ? 'bg-purple-600 text-white shadow-xs'
-                                    : 'bg-white text-purple-900 border border-purple-200 hover:bg-purple-100'
+                                    ? 'bg-[#032244] text-white shadow-xs'
+                                    : 'bg-white text-[#032244] border border-slate-200 hover:bg-slate-100'
                                 }`}
                               >
                                 {friend}
@@ -896,7 +868,7 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                             value={item.assignedToFriend || ''}
                             onChange={(e) => handleAssignFriendToCartItem(idx, e.target.value)}
                             placeholder="O escribe nombre..."
-                            className="px-2 py-1 text-[10px] bg-white border border-purple-200 rounded-lg flex-1 min-w-[90px] font-semibold text-slate-800 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                            className="px-2 py-1 text-[10px] bg-white border border-slate-200 rounded-lg flex-1 min-w-[90px] font-semibold text-[#032244] focus:outline-none focus:ring-1 focus:ring-[#D7131A]"
                           />
                         </div>
                       </div>
@@ -907,15 +879,15 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                         <button
                           type="button"
                           onClick={() => handleUpdateCartQuantity(idx, item.quantity - 1)}
-                          className="text-slate-500 hover:text-slate-900 p-0.5"
+                          className="text-[#032244]/60 hover:text-[#032244] p-0.5"
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </button>
-                        <span className="font-bold text-slate-900 w-4 text-center">{item.quantity}</span>
+                        <span className="font-bold text-[#032244] w-4 text-center tabular-nums">{item.quantity}</span>
                         <button
                           type="button"
                           onClick={() => handleUpdateCartQuantity(idx, item.quantity + 1)}
-                          className="text-slate-500 hover:text-slate-900 p-0.5"
+                          className="text-[#032244]/60 hover:text-[#032244] p-0.5"
                         >
                           <Plus className="w-3.5 h-3.5" />
                         </button>
@@ -924,7 +896,7 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                       <button
                         type="button"
                         onClick={() => handleUpdateCartQuantity(idx, 0)}
-                        className="text-slate-400 hover:text-red-500 p-1 text-[10px] flex items-center gap-0.5 transition-colors"
+                        className="text-slate-400 hover:text-[#D7131A] p-1 text-[10px] flex items-center gap-0.5 transition-colors"
                       >
                         <Trash2 className="w-3 h-3" />
                         <span>Quitar</span>
@@ -935,21 +907,21 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
               </div>
 
               {/* Feature 6: Smart 1-Click Upsell */}
-              <div className="pt-4 bg-orange-50/70 p-3.5 rounded-2xl border border-orange-200 space-y-2">
+              <div className="pt-4 bg-[#032244]/[0.04] p-3.5 rounded-2xl border border-[#032244]/15 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-orange-950 flex items-center gap-1.5">
-                    <Sparkles className="w-4 h-4 text-orange-600" />
+                  <span className="text-xs font-bold text-[#032244] flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-[#D7131A]" />
                     ¿Añadir Jugo de Fruta Natural (+20% OFF)?
                   </span>
-                  <span className="text-xs font-black text-orange-700">+$2.500</span>
+                  <span className="text-xs font-black text-[#D7131A] tabular-nums">+$2.500</span>
                 </div>
-                <p className="text-[11px] text-orange-800">
-                  Combo especial con tu comida. ¡Agrégalo con 1 clic!
+                <p className="text-[11px] text-[#032244]/70">
+                  Combo especial con tu comida. Agrégalo con 1 clic.
                 </p>
                 <button
                   type="button"
                   onClick={handleAddUpsell}
-                  className="w-full py-2 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all"
+                  className="w-full py-2 bg-[#032244] hover:bg-[#0a3466] text-white font-bold text-xs rounded-xl shadow-xs transition-all"
                 >
                   + Agregar Bebida Promo al Carrito
                 </button>
@@ -957,7 +929,7 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
 
               {/* Payment Method Selector */}
               <div className="pt-4 space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#032244]/65 block">
                   Método de Pago
                 </span>
                 <div className="grid grid-cols-2 gap-2 text-xs">
@@ -966,14 +938,14 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                     onClick={() => setPaymentMethod('campus_wallet')}
                     className={`p-3 rounded-2xl border text-left transition-all ${
                       paymentMethod === 'campus_wallet'
-                        ? 'border-orange-600 bg-orange-50 text-orange-950 ring-1 ring-orange-600 font-bold'
-                        : 'border-slate-200 text-slate-700'
+                        ? 'border-[#D7131A] bg-[#D7131A]/5 text-[#032244] ring-1 ring-[#D7131A] font-bold'
+                        : 'border-slate-200 text-[#032244]/75'
                     }`}
                   >
                     <span className="flex items-center gap-1.5 mb-1">
-                      <Wallet className="w-4 h-4 text-orange-600" /> CampusPay (1-Click)
+                      <Wallet className="w-4 h-4 text-[#D7131A]" /> CampusPay (1-Click)
                     </span>
-                    <span className="text-[11px] text-slate-500 font-normal">
+                    <span className="text-[11px] text-[#032244]/65 font-normal tabular-nums">
                       Saldo: ${wallet.balance.toLocaleString('es-CO')}
                     </span>
                   </button>
@@ -983,19 +955,19 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                     onClick={() => setPaymentMethod('mostrador_efectivo')}
                     className={`p-3 rounded-2xl border text-left transition-all ${
                       paymentMethod === 'mostrador_efectivo'
-                        ? 'border-slate-800 bg-slate-100 text-slate-950 ring-1 ring-slate-800 font-bold'
-                        : 'border-slate-200 text-slate-700'
+                        ? 'border-[#032244] bg-[#032244]/5 text-[#032244] ring-1 ring-[#032244] font-bold'
+                        : 'border-slate-200 text-[#032244]/75'
                     }`}
                   >
-                    <span className="block mb-1">💵 En Mostrador</span>
-                    <span className="text-[11px] text-slate-500 font-normal">Pagas al retirar</span>
+                    <span className="block mb-1">En Mostrador</span>
+                    <span className="text-[11px] text-[#032244]/65 font-normal">Pagas al retirar</span>
                   </button>
                 </div>
               </div>
 
               {/* Notes */}
               <div className="pt-4 space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 block">
+                <label className="text-xs font-bold text-[#032244] block">
                   Notas para la cocina (Opcional)
                 </label>
                 <input
@@ -1003,16 +975,16 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                   value={orderNotes}
                   onChange={(e) => setOrderNotes(e.target.value)}
                   placeholder="Ej. Salsa tártara aparte, cubiertos extra..."
-                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 text-slate-800"
+                  className="w-full px-3 py-2 text-xs bg-[#F5F6F8] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D7131A] text-[#032244]"
                 />
               </div>
             </div>
 
             {/* Footer Checkout */}
-            <div className="p-4 sm:p-5 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-4 shrink-0">
+            <div className="p-4 sm:p-5 bg-[#F5F6F8] border-t border-slate-200 flex items-center justify-between gap-4 shrink-0">
               <div>
-                <span className="block text-xs text-slate-400 font-medium">Total a pagar</span>
-                <span className="text-xl font-black text-slate-900">
+                <span className="block text-xs text-[#032244]/60 font-medium">Total a pagar</span>
+                <span className="text-xl font-black text-[#032244] tabular-nums">
                   ${cartSubtotal.toLocaleString('es-CO')}
                 </span>
               </div>
@@ -1021,7 +993,7 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                 type="button"
                 disabled={isSubmitting}
                 onClick={handleCheckout}
-                className="flex-1 py-3.5 px-6 bg-orange-600 hover:bg-orange-700 active:scale-[0.98] text-white font-bold text-sm rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 disabled:bg-slate-300"
+                className="flex-1 py-3.5 px-6 bg-[#D7131A] hover:bg-[#b51016] active:scale-[0.98] text-white font-bold text-sm rounded-2xl shadow-md shadow-[#D7131A]/20 transition-all flex items-center justify-center gap-2 disabled:bg-slate-300"
               >
                 {isSubmitting ? (
                   <span>Enviando comanda...</span>
@@ -1070,17 +1042,17 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
 
       {/* Order History Modal */}
       {showHistoryModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[85vh]">
-            <div className="p-4 bg-slate-900 text-white flex items-center justify-between shrink-0">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#032244]/60 backdrop-blur-sm animate-in fade-in">
+          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden border border-slate-200 flex flex-col max-h-[85vh]">
+            <div className="p-4 bg-[#032244] text-white flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
-                <History className="w-5 h-5 text-orange-400" />
+                <History className="w-5 h-5 text-[#D7131A]" />
                 <h3 className="font-bold text-base">Mis Pedidos Anteriores</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setShowHistoryModal(false)}
-                className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-full"
+                className="p-1.5 bg-white/10 hover:bg-white/20 text-white rounded-full"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1088,7 +1060,7 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
 
             <div className="p-4 overflow-y-auto space-y-3 flex-1 divide-y divide-slate-100">
               {studentOrders.length === 0 ? (
-                <p className="text-center text-xs text-slate-400 py-8">
+                <p className="text-center text-xs text-[#032244]/50 py-8">
                   No tienes pedidos registrados con este ID ({studentId}).
                 </p>
               ) : (
@@ -1096,23 +1068,23 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                   <div key={ord.id} className="pt-3 pb-2 text-xs flex items-center justify-between gap-3">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-900">Pedido #{ord.pickupCode}</span>
+                        <span className="font-bold text-[#032244] tabular-nums">Pedido #{ord.pickupCode}</span>
                         <span
                           className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
                             ord.status === 'entregado'
-                              ? 'bg-slate-100 text-slate-600'
+                              ? 'bg-slate-100 text-[#032244]/70'
                               : ord.status === 'listo'
                               ? 'bg-emerald-100 text-emerald-700'
-                              : 'bg-orange-100 text-orange-700'
+                              : 'bg-[#D7131A]/10 text-[#D7131A]'
                           }`}
                         >
                           {ord.status}
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-500 mt-0.5">
+                      <p className="text-[11px] text-[#032244]/65 mt-0.5">
                         {ord.items.map((i) => `${i.quantity}x ${i.name}`).join(', ')}
                       </p>
-                      <span className="text-[10px] text-slate-400">
+                      <span className="text-[10px] text-[#032244]/50">
                         {new Date(ord.createdAt).toLocaleTimeString([], {
                           hour: '2-digit',
                           minute: '2-digit',
@@ -1121,7 +1093,7 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                     </div>
 
                     <div className="text-right shrink-0">
-                      <span className="font-bold text-slate-900 block">
+                      <span className="font-bold text-[#032244] block tabular-nums">
                         ${ord.totalPrice.toLocaleString('es-CO')}
                       </span>
                       <button
@@ -1130,7 +1102,7 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
                           setShowHistoryModal(false);
                           setQuickQRModalOrder(ord);
                         }}
-                        className="mt-1 text-[11px] font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1"
+                        className="mt-1 text-[11px] font-bold text-[#D7131A] hover:text-[#b51016] flex items-center gap-1"
                       >
                         <QrCode className="w-3 h-3" /> Ver QR
                       </button>
@@ -1144,29 +1116,23 @@ export const StudentApp: React.FC<StudentAppProps> = ({ onLogout }) => {
       )}
 
       {/* Footer */}
-      <footer className="mt-auto py-6 border-t border-slate-200/80 bg-white text-center text-xs text-slate-500">
+      <footer className="mt-auto py-6 border-t border-slate-200/90 bg-white text-center text-xs text-[#032244]/65">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>© 2026 CampusBite • Más campus, menos filas.</p>
+          <p>© 2026 UNIGO • Más campus, menos filas.</p>
           <div className="flex items-center gap-3">
-            <span className="text-slate-500">
-              Sesión activa: <strong className="text-slate-800">{currentStudent?.name || studentName}</strong> ({currentStudent?.id || studentId})
+            <span>
+              Sesión activa: <strong className="text-[#032244]">{currentStudent?.name || studentName}</strong> ({currentStudent?.id || studentId})
             </span>
             <button
               type="button"
               onClick={handleStudentLogout}
-              className="text-red-600 font-bold hover:underline"
+              className="text-[#D7131A] font-bold hover:underline"
             >
               Cerrar Sesión
             </button>
           </div>
         </div>
       </footer>
-
-      {/* Supabase Connection & Configuration Modal */}
-      <SupabaseConfigModal
-        isOpen={showSupabaseModal}
-        onClose={() => setShowSupabaseModal(false)}
-      />
     </div>
   );
 };

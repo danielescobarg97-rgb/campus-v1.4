@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand-red: #D7131A;
+  --color-brand-red-hover: #b51016;
+  --color-brand-navy: #032244;
+  --color-brand-navy-light: #0a3466;
+  --color-brand-bg: #F5F6F8;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  body {
+    background-color: #F5F6F8;
+    color: #032244;
+    font-family: var(--font-sans);
+  }
+}
+
 @layer utilities {
   .scrollbar-none::-webkit-scrollbar {
     display: none;

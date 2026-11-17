@@ -47,7 +47,7 @@ export const OrderQRCodeModal: React.FC<OrderQRCodeModalProps> = ({ order, isOpe
           width: 210,
           margin: 1.5,
           color: {
-            dark: '#0f172a',
+            dark: '#032244',
             light: '#ffffff',
           },
         },
@@ -94,11 +94,11 @@ export const OrderQRCodeModal: React.FC<OrderQRCodeModalProps> = ({ order, isOpe
 
   const isScheduled = order.pickupType === 'programado';
 
-  const whatsAppMessage = `¡Hola ${order.studentName}! 🎉 Tu pedido de CampusBite está LISTO para recoger en la barra de ${order.locationName}.\n\nCódigo de entrega: #${order.pickupCode}\nItems: ${order.items.map((i) => `${i.quantity}x ${i.name}`).join(', ')}\n\n¡Buen provecho!`;
+  const whatsAppMessage = `¡Hola ${order.studentName}! 🎉 Tu pedido de UNIGO está LISTO para recoger en la barra de ${order.locationName}.\n\nCódigo de entrega: #${order.pickupCode}\nItems: ${order.items.map((i) => `${i.quantity}x ${i.name}`).join(', ')}\n\n¡Buen provecho!`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[92vh] relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#032244]/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-white w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden border border-slate-200 flex flex-col max-h-[92vh] relative">
         {/* Animated Toast simulation alert at top */}
         {showToast && (
           <div className="absolute top-2 inset-x-2 z-50 animate-in slide-in-from-top-3 fade-in duration-300">
@@ -131,9 +131,9 @@ export const OrderQRCodeModal: React.FC<OrderQRCodeModalProps> = ({ order, isOpe
         )}
 
         {/* Header */}
-        <div className="p-4 bg-gradient-to-r from-orange-600 to-amber-600 text-white flex items-center justify-between shrink-0">
+        <div className="p-4 bg-[#032244] text-white flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-amber-200" />
+            <Sparkles className="w-5 h-5 text-[#D7131A]" />
             <h3 className="font-bold text-base">Pase de Recogida Digital</h3>
           </div>
           <button
@@ -152,20 +152,20 @@ export const OrderQRCodeModal: React.FC<OrderQRCodeModalProps> = ({ order, isOpe
           </div>
 
           {/* Location & Schedule header */}
-          <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200 text-left text-xs space-y-1.5">
-            <div className="flex items-center gap-2 text-slate-800 font-bold">
-              <MapPin className="w-3.5 h-3.5 text-orange-600 shrink-0" />
+          <div className="bg-[#F5F6F8] p-3 rounded-2xl border border-slate-200 text-left text-xs space-y-1.5">
+            <div className="flex items-center gap-2 text-[#032244] font-bold">
+              <MapPin className="w-3.5 h-3.5 text-[#D7131A] shrink-0" />
               <span>{order.locationName}</span>
             </div>
             {isScheduled && (
-              <div className="flex items-center gap-2 text-indigo-700 font-semibold bg-indigo-50 px-2 py-1 rounded-xl">
-                <Calendar className="w-3.5 h-3.5" />
+              <div className="flex items-center gap-2 text-[#032244] font-semibold bg-[#032244]/5 px-2 py-1 rounded-xl">
+                <Calendar className="w-3.5 h-3.5 text-[#032244]" />
                 <span>Programado para: {order.scheduledTime} (Receso)</span>
               </div>
             )}
-            <div className="flex items-center justify-between text-slate-500 pt-1 border-t border-slate-200/60">
+            <div className="flex items-center justify-between text-[#032244]/65 pt-1 border-t border-slate-200/60">
               <span>Estado actual:</span>
-              <span className="font-bold uppercase text-orange-600 text-[11px]">
+              <span className="font-bold uppercase text-[#D7131A] text-[11px]">
                 {order.status === 'listo'
                   ? '¡LISTO PARA RECOGER!'
                   : order.status === 'preparando'
@@ -176,29 +176,29 @@ export const OrderQRCodeModal: React.FC<OrderQRCodeModalProps> = ({ order, isOpe
           </div>
 
           {/* QR Canvas */}
-          <div className="p-3 bg-white rounded-2xl border-2 border-dashed border-orange-300 inline-block shadow-inner mx-auto">
+          <div className="p-3 bg-white rounded-2xl border-2 border-dashed border-[#D7131A]/40 inline-block shadow-inner mx-auto">
             <canvas ref={canvasRef} className="rounded-lg max-w-full" />
           </div>
 
           {/* Big Pickup Code */}
-          <div className="bg-orange-50 border border-orange-200 rounded-2xl p-3">
-            <span className="text-[11px] font-bold text-orange-700 uppercase tracking-widest block mb-0.5">
+          <div className="bg-[#F5F6F8] border border-slate-200 rounded-2xl p-3">
+            <span className="text-[11px] font-bold text-[#D7131A] uppercase tracking-widest block mb-0.5">
               Código de Entrega Rápida
             </span>
             <div className="flex items-center justify-center gap-2">
-              <span className="text-3xl font-black text-orange-950 font-mono tracking-wider">
+              <span className="text-3xl font-black text-[#032244] font-mono tracking-wider tabular-nums">
                 #{order.pickupCode}
               </span>
               <button
                 type="button"
                 onClick={handleCopyCode}
-                className="p-1.5 bg-white text-orange-700 hover:bg-orange-100 rounded-xl border border-orange-200 transition-colors"
+                className="p-1.5 bg-white text-[#032244] hover:bg-slate-100 rounded-xl border border-slate-200 transition-colors"
                 title="Copiar código"
               >
                 {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
               </button>
             </div>
-            <p className="text-[11px] text-orange-800/80 mt-1">
+            <p className="text-[11px] text-[#032244]/70 mt-1">
               Muestra este código o QR en el mostrador para retirar
             </p>
           </div>
@@ -258,10 +258,10 @@ export const OrderQRCodeModal: React.FC<OrderQRCodeModalProps> = ({ order, isOpe
                   <div className="flex items-center justify-between border-b border-slate-800/80 pb-1.5">
                     <div className="flex items-center gap-1.5">
                       <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center text-[10px] font-black text-white">
-                        CB
+                        UG
                       </div>
                       <span className="text-emerald-400 font-bold text-[11px]">
-                        CampusBite Notifications
+                        UNIGO Notifications
                       </span>
                       <span className="text-[10px] text-emerald-300" title="Cuenta oficial verificada">
                         ✓
@@ -292,23 +292,23 @@ export const OrderQRCodeModal: React.FC<OrderQRCodeModalProps> = ({ order, isOpe
           </div>
 
           {/* Items breakdown with modifiers and friends */}
-          <div className="text-left bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-2 text-xs">
-            <span className="font-bold text-slate-700 block">Detalle del Pedido:</span>
+          <div className="text-left bg-[#F5F6F8] p-3 rounded-2xl border border-slate-200 space-y-2 text-xs">
+            <span className="font-bold text-[#032244] block">Detalle del Pedido:</span>
             {order.items.map((item, idx) => (
               <div key={idx} className="pb-1 border-b border-slate-200/50 last:border-none last:pb-0">
-                <div className="flex justify-between font-medium text-slate-800">
+                <div className="flex justify-between font-medium text-[#032244]">
                   <span>
                     {item.quantity}x {item.name}
                   </span>
-                  <span>${(item.price * item.quantity).toLocaleString('es-CO')}</span>
+                  <span className="tabular-nums">${(item.price * item.quantity).toLocaleString('es-CO')}</span>
                 </div>
                 {item.assignedToFriend && (
-                  <span className="inline-block mt-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-700">
-                    👤 {item.assignedToFriend}
+                  <span className="inline-block mt-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#032244]/10 text-[#032244]">
+                    {item.assignedToFriend}
                   </span>
                 )}
                 {item.selectedModifiers && item.selectedModifiers.length > 0 && (
-                  <div className="text-[10px] text-slate-500 pl-2">
+                  <div className="text-[10px] text-[#032244]/60 pl-2">
                     {item.selectedModifiers.map((m, mIdx) => (
                       <span key={mIdx} className="block">
                         • {m.groupName}: {m.optionName} {m.priceDelta > 0 && `(+$${m.priceDelta})`}
@@ -321,8 +321,8 @@ export const OrderQRCodeModal: React.FC<OrderQRCodeModalProps> = ({ order, isOpe
           </div>
         </div>
 
-        <div className="p-3 bg-slate-50 border-t border-slate-100 text-center shrink-0">
-          <p className="text-[11px] text-slate-500 font-medium">
+        <div className="p-3 bg-[#F5F6F8] border-t border-slate-200 text-center shrink-0">
+          <p className="text-[11px] text-[#032244]/70 font-medium">
             ¡Sin filas! Pasa directo a la zona de entrega rápida.
           </p>
         </div>

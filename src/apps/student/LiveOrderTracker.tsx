@@ -56,7 +56,7 @@ export const LiveOrderTracker: React.FC<LiveOrderTrackerProps> = ({ order, onOpe
       className={`rounded-3xl p-4 sm:p-5 shadow-xl border transition-all ${
         isReady
           ? 'bg-gradient-to-br from-emerald-600 via-teal-700 to-emerald-800 text-white border-emerald-400/50 shadow-emerald-500/20'
-          : 'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 text-white border-slate-700/60 shadow-slate-950/30'
+          : 'bg-[#032244] text-white border-[#032244] shadow-[#032244]/25'
       }`}
     >
       {/* Header bar */}
@@ -64,16 +64,16 @@ export const LiveOrderTracker: React.FC<LiveOrderTrackerProps> = ({ order, onOpe
         <div className="flex items-center gap-2">
           <div
             className={`p-2 rounded-xl ${
-              isReady ? 'bg-white/20 text-white' : 'bg-orange-500/20 text-orange-400'
+              isReady ? 'bg-white/20 text-white' : 'bg-[#D7131A]/20 text-[#D7131A]'
             }`}
           >
-            {isReady ? <Sparkles className="w-5 h-5 animate-spin" /> : <ChefHat className="w-5 h-5 animate-pulse" />}
+            {isReady ? <Sparkles className="w-5 h-5" /> : <ChefHat className="w-5 h-5 text-white" />}
           </div>
           <div>
             <span className="text-[11px] font-bold tracking-wider uppercase opacity-80 block">
               {isReady ? '¡TU PEDIDO ESTÁ LISTO!' : 'Seguimiento en Vivo'}
             </span>
-            <span className="text-sm font-black flex items-center gap-1.5">
+            <span className="text-sm font-black flex items-center gap-1.5 tabular-nums">
               Pedido #{order.pickupCode}
             </span>
           </div>
@@ -82,10 +82,10 @@ export const LiveOrderTracker: React.FC<LiveOrderTrackerProps> = ({ order, onOpe
         <button
           type="button"
           onClick={onOpenQR}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-xs font-bold transition-all shadow-md active:scale-95 ${
+          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition-all shadow-md active:scale-95 ${
             isReady
               ? 'bg-white text-emerald-900 hover:bg-emerald-50'
-              : 'bg-orange-600 text-white hover:bg-orange-500'
+              : 'bg-[#D7131A] text-white hover:bg-[#b51016]'
           }`}
         >
           <QrCode className="w-4 h-4" />
@@ -94,13 +94,13 @@ export const LiveOrderTracker: React.FC<LiveOrderTrackerProps> = ({ order, onOpe
       </div>
 
       {/* Location and Scheduled Info */}
-      <div className="flex flex-wrap items-center gap-2 text-xs py-1.5 opacity-90 mb-3 border-b border-white/10">
+      <div className="flex flex-wrap items-center gap-2 text-xs py-1.5 opacity-90 mb-3 border-b border-white/15">
         <span className="flex items-center gap-1">
-          <MapPin className="w-3.5 h-3.5 text-orange-400" />
+          <MapPin className="w-3.5 h-3.5 text-[#D7131A]" />
           {order.locationName}
         </span>
         {isScheduled && (
-          <span className="flex items-center gap-1 font-semibold px-2 py-0.5 rounded-full bg-indigo-500/30 border border-indigo-400/40 text-indigo-200">
+          <span className="flex items-center gap-1 font-semibold px-2 py-0.5 rounded-full bg-white/15 border border-white/20 text-white">
             <Calendar className="w-3 h-3" />
             Recojo: {order.scheduledTime} (Receso)
           </span>
@@ -122,11 +122,11 @@ export const LiveOrderTracker: React.FC<LiveOrderTrackerProps> = ({ order, onOpe
                     isCurrent
                       ? isReady
                         ? 'bg-white text-emerald-800 ring-4 ring-white/30 scale-110 shadow-lg'
-                        : 'bg-orange-500 text-white ring-4 ring-orange-500/30 scale-110 shadow-lg'
+                        : 'bg-[#D7131A] text-white ring-4 ring-[#D7131A]/30 scale-110 shadow-lg'
                       : isCompleted
                       ? isReady
                         ? 'bg-emerald-400 text-emerald-950'
-                        : 'bg-orange-600/70 text-white'
+                        : 'bg-[#D7131A]/80 text-white'
                       : 'bg-white/10 text-white/40'
                   }`}
                 >
@@ -150,11 +150,11 @@ export const LiveOrderTracker: React.FC<LiveOrderTrackerProps> = ({ order, onOpe
       </div>
 
       {/* Items list preview */}
-      <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-xs text-white/80">
+      <div className="mt-3 pt-2.5 border-t border-white/15 flex items-center justify-between text-xs text-white/85">
         <span className="truncate max-w-[200px]">
           {order.items.map((i) => `${i.quantity}x ${i.name}`).join(', ')}
         </span>
-        <span className="font-bold text-white shrink-0">
+        <span className="font-bold text-white shrink-0 tabular-nums">
           ${order.totalPrice.toLocaleString('es-CO')}
         </span>
       </div>
